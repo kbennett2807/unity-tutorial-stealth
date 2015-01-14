@@ -14,6 +14,11 @@ public class LastPlayerSighting : MonoBehaviour
 	AudioSource panicAudio;
 	AudioSource[] sirens;
 
+	public void SetPlayerLocationUnknown()
+	{
+		position = resetPosition;
+	}
+
 	void Awake ()
 	{
 		alarm = GameObject.FindWithTag (Tags.alarmLight).GetComponent<AlarmLight> ();
@@ -21,7 +26,7 @@ public class LastPlayerSighting : MonoBehaviour
 		panicAudio = transform.Find ("secondaryMusic").audio;
 		GameObject[] sirenGameObjects = GameObject.FindGameObjectsWithTag (Tags.siren);
 		sirens = new AudioSource[sirenGameObjects.Length];
-
+		
 		for (int i = 0; i < sirens.Length; i++)
 		{
 			sirens [i] = sirenGameObjects [i].audio;
@@ -31,6 +36,7 @@ public class LastPlayerSighting : MonoBehaviour
 	void Update()
 	{
 		SwitchAlarms();
+		CheckMusicFading();
 	}
 
 	void SwitchAlarms ()
@@ -69,22 +75,33 @@ public class LastPlayerSighting : MonoBehaviour
 		}
 	}
 
+	void CheckMusicFading()
+	{
+		if(PlayerLocationKnown())
+		{
+			FadeAudioIn(panicAudio);
+			FadeAudioOut(audio);
+		
+		}
+		else
+		{
+			FadeAudioIn(audio);
+			FadeAudioOut(panicAudio);
+		}
+	}
+
 	bool PlayerLocationKnown ()
 	{
 		return (position != resetPosition);
 	}
 
-	void CheckMusicFading()
+	void FadeAudioOut(AudioSource audioToFade)
 	{
-		if(PlayerLocationKnown())
-		{
-			audio.volume = Mathf.Lerp(audio.volume, 0f, musicFadeSpeed * Time.deltaTime);
-			panicAudio.volume = Mathf.Lerp(panicAudio.volume, 0.8f, musicFadeSpeed * Time.deltaTime);
-		}
-		else
-		{
-			audio.volume = Mathf.Lerp(audio.volume, 1f, musicFadeSpeed * Time.deltaTime);
-			panicAudio.volume = Mathf.Lerp(panicAudio.volume, 0f, musicFadeSpeed * Time.deltaTime);
-		}
+		audioToFade.volume = Mathf.Lerp(audioToFade.volume, 0f, musicFadeSpeed * Time.deltaTime);
+	}
+
+	void FadeAudioIn(AudioSource audioToFade)
+	{
+		audioToFade.volume = Mathf.Lerp(audioToFade.volume, 0.8f, musicFadeSpeed * Time.deltaTime);
 	}
 }

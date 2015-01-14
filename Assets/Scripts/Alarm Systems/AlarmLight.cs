@@ -21,7 +21,7 @@ public class AlarmLight : MonoBehaviour
 		if (alarmOn)
 		{
 			FadeToTargetIntensity ();
-			CheckForTargetIntensityToggle();
+			CheckForTargetIntensityToggle ();
 		}
 		else
 		{

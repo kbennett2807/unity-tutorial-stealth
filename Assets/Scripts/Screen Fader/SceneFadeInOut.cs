@@ -8,7 +8,6 @@ public class SceneFadeInOut : MonoBehaviour
 
 	void Awake ()
 	{
-		Debug.Log("");
 		guiTexture.enabled = true;
 		guiTexture.pixelInset = new Rect (0f, 0f, Screen.width, Screen.height);
 	}
@@ -33,7 +32,6 @@ public class SceneFadeInOut : MonoBehaviour
 
 	void StartScene ()
 	{
-		Debug.Log("");
 		FadeToClear ();
 
 		if (guiTexture.color.a <= 0.05f)
